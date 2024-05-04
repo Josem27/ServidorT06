@@ -26,8 +26,8 @@
                         <th>Categoría</th>
                         <th>Título</th>
                         <th>Descripción</th>
-                        <th>Acciones</th>
                         <th>Fecha y Usuario</th>
+                        <th>Acciones</th> <!-- Columna de acciones al final -->
                     </tr>
                 </thead>
                 <tbody>
@@ -36,6 +36,7 @@
                         <td>{{ $datos->categoria->nombre }}</td>
                         <td>{{ $datos->titulo }}</td>
                         <td>{!! $datos->descripcion !!}</td>
+                        <td>{{ $datos->fecha }} // {{ $datos->usuario ? $datos->usuario->nick : 'Usuario no disponible' }}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Acciones">
                                 <a class="btn btn-primary btn-action" href="{{ route('detalle',$datos->id) }}" role="button"><i class="bi bi-info-circle"></i></a>
@@ -51,7 +52,6 @@
                                 @endauth
                             </div>
                         </td>
-                        <td>{{ $datos->fecha }} // {{ $datos->usuario ? $datos->usuario->nick : 'Usuario no disponible' }}</td>
                     </tr>
                     @endforeach
                 </tbody>
