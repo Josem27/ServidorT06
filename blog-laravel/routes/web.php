@@ -4,7 +4,6 @@ use App\Http\Controllers\EntradasController;
 use App\Http\Controllers\LogsController;
 use App\Http\Controllers\UsuariosController;
 use Illuminate\Support\Facades\Route;
-use Barryvdh\DomPDF\Facade as PDF; // Cambia la referencia a DomPDF
 use App\Models\Entrada;
 
 /*
@@ -49,13 +48,9 @@ Route::middleware(['web'])->group(function () {
 
     Route::get('/logs', [LogsController::class, 'listado'])->name('logs');
 
-    Route::get('/test', function () {
-        $detalles = Entrada::with('categoria', 'usuario')->where('id', 1)->get();
-        $pdf = PDF::loadView('entradas.detalle', ['detalles' => $detalles]);
-        return $pdf->download('pruebapdf.pdf');
-    });
-
     Route::get('/excel', [UsuariosController::class, 'exportar'])->name('exportar');
 
     Route::post('/logout', [UsuariosController::class, 'logout'])->name('logout');
+
+    Route::get('/generar-pdf', [EntradasController::class, 'generarPDF'])->name('generar.pdf');
 });

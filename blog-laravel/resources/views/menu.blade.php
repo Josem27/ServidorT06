@@ -13,7 +13,7 @@
                     <a class="btn btn-info btn-lg" href="{{ route('nuevaEntrada') }}" role="button">Añadir entrada</a>
                 </div>
                 <div class="btn-group me-2" role="group" aria-label="Second group">
-                    <a class="btn btn-info btn-lg" href="#" role="button">Imprimir PDF</a>
+                    <a class="btn btn-info btn-lg" href="{{ route('generar.pdf') }}" role="button">Imprimir PDF</a>
                 </div>
                 @auth
                     @if(auth()->user()->esAdmin)

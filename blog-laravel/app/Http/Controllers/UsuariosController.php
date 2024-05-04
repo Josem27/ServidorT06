@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
+
 class UsuariosController extends Controller
 {
     public function registro(){
@@ -74,9 +75,9 @@ class UsuariosController extends Controller
     }
 
     public function logout()
-        {
-            Auth::logout();
-            return redirect()->route('login');
-        }
-
+    {
+         Auth::logout();
+         return redirect()->route('login');
+    }
+        
 }

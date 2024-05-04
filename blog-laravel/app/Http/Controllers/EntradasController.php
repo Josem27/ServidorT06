@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use App\Models\Entrada;
+use App\Models\Usuario;
 use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use TCPDF;
+
 
 class EntradasController extends Controller
 {
@@ -142,4 +145,37 @@ class EntradasController extends Controller
             return redirect()->route('entradas', [0]);
         }
     }
+
+
+    public function generarPDF()
+    {
+        // Obtener todas las entradas con las relaciones cargadas
+        $entradas = Entrada::with('categoria', 'usuario')->get();
+    
+        // Crea una nueva instancia de TCPDF
+        $pdf = new TCPDF();
+    
+        // Establece el título del documento
+        $pdf->SetTitle('Listado de Entradas');
+    
+        // Agrega una página al documento
+        $pdf->AddPage();
+    
+        // Establece el contenido del PDF
+        $pdf->SetFont('helvetica', '', 12);
+        foreach ($entradas as $entrada) {
+            $pdf->Cell(0, 10, 'Título: ' . $entrada->titulo, 0, 1, 'L');
+            $pdf->Cell(0, 10, 'Descripción: ' . $entrada->descripcion, 0, 1, 'L');
+            $pdf->Cell(0, 10, 'Categoría: ' . $entrada->categoria->nombre, 0, 1, 'L');
+            $pdf->Cell(0, 10, 'Usuario: ' . $entrada->usuario->nick, 0, 1, 'L');
+            $pdf->Ln(5); // Agrega un salto de línea
+        }
+    
+        // Genera la salida del PDF
+        $pdfContent = $pdf->Output('listado_entradas.pdf', 'S');
+    
+        // Retorna la respuesta con el contenido del PDF
+        return response($pdfContent, 200)
+            ->header('Content-Type', 'application/pdf');
+    }    
 }
