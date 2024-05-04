@@ -1,15 +1,61 @@
 <?php
 
+use App\Http\Controllers\EntradasController;
+use App\Http\Controllers\LogsController;
+use App\Http\Controllers\UsuariosController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Controlador;
+use Barryvdh\DomPDF\Facade as PDF; // Cambia la referencia a DomPDF
+use App\Models\Entrada;
 
-// Ruta para mostrar el formulario de inicio de sesión (GET)
-Route::get('/', function () {
-    return view('login');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application.
+| These routes are loaded by the RouteServiceProvider within a group
+| which contains the "web" middleware group. Now create something great!
+|
+*/
+
+Route::middleware(['web'])->group(function () {
+    Route::get('/', function () {
+        if (session()->has('logged') && session('logged')) { // Verifica si la sesión 'logged' está activa
+            return redirect()->route('entradas');
+        }
+        return view('usuarios.index');
+    });
+
+    Route::get('/login', function () {
+        return view('usuarios.index');
+    })->name('login');
+    Route::post('/login', [UsuariosController::class, 'login'])->name('login');
+
+    Route::get('/registro', [UsuariosController::class, 'registro'])->name('registro');
+    Route::post('/registro', [UsuariosController::class, 'guardarRegistro'])->name('registro');
+
+    Route::get('/entradas/{page}', [EntradasController::class, 'listado'])->name('entradas');
+
+    Route::get('/nuevaEntrada', [EntradasController::class, 'crearEntrada'])->name('nuevaEntrada');
+    Route::post('/nuevaEntrada', [EntradasController::class, 'guardarEntrada'])->name('nuevaEntrada');
+
+    Route::get('/detalle/{id}', [EntradasController::class, 'detalle'])->name('detalle');
+
+    Route::get('/editar/{id}', [EntradasController::class, 'edicion'])->name('editar');
+    Route::patch('/editar/{id}', [EntradasController::class, 'editar'])->name('editar');
+
+    Route::get('/eliminar/{id}', [EntradasController::class, 'eliminar'])->name('eliminar');
+    Route::delete('/eliminar/{id}', [EntradasController::class, 'borrar'])->name('eliminar');
+
+    Route::get('/logs', [LogsController::class, 'listado'])->name('logs');
+
+    Route::get('/test', function () {
+        $detalles = Entrada::with('categoria', 'usuario')->where('id', 1)->get();
+        $pdf = PDF::loadView('entradas.detalle', ['detalles' => $detalles]);
+        return $pdf->download('pruebapdf.pdf');
+    });
+
+    Route::get('/excel', [UsuariosController::class, 'exportar'])->name('exportar');
+
+    Route::post('/logout', [UsuariosController::class, 'logout'])->name('logout');
 });
-
-Route::get('/', [Controlador::class, 'index']);
-Route::post('/login', [Controlador::class, 'login']);
-Route::get('/registro', [Controlador::class, 'mostrarFormularioRegistro'])->name('registro');
-Route::post('/registro', [Controlador::class, 'registrar'])->name('registro');
-Route::get('/listado', [Controlador::class, 'listado'])->name('listado');
