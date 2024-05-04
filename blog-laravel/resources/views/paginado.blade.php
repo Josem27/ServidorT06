@@ -9,17 +9,13 @@
                 </li>
             @endif
             
-            @for ($i = $page; $i <= $page + 2; $i++)
-                <li class="page-item {{ $i == $page + 1 ? 'active' : '' }}">
-                    <a class="page-link" href="{{ route('entradas', $i) }}">{{ $i }}</a>
+            @for ($i = max(0, $page - 1); $i <= min($contador, $page + 1); $i++)
+                <li class="page-item {{ $i == $page ? 'active' : '' }}">
+                    <a class="page-link" href="{{ route('entradas', $i) }}">{{ $i + 1 }}</a>
                 </li>
             @endfor
             
-            @if ($contador > $offset + 3)
-                <li class="page-item">
-                    <a class="page-link" href="{{ route('entradas', $page + 1) }}">{{ $page + 2 }}</a>
-                </li>
-
+            @if ($page < $contador - 1)
                 <li class="page-item">
                     <a class="page-link" href="{{ route('entradas', $page + 1) }}">Siguiente</a>
                 </li>
