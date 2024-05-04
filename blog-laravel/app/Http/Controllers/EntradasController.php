@@ -97,7 +97,7 @@ class EntradasController extends Controller
         if ($id != -1) {
             Entrada::where('id', $id)->delete();
             $log = new Log;
-            $log->usuario = $_SESSION['nick'];
+            $log->usuario = Auth::user()->nick;
             $log->operacion = "Entrada Eliminada";
             $log->save();
         }

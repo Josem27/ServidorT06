@@ -33,7 +33,7 @@
                     </form>
                     <hr>
                     <div class="text-center">
-                        <a href="/registro" class="btn btn-success btn-block">Registrarse</a>
+                        <a href="{{ route('registro') }}" class="btn btn-success btn-block">Registrarse</a>
                     </div>
                 </div>
             </div>

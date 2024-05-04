@@ -53,4 +53,7 @@ Route::middleware(['web'])->group(function () {
     Route::post('/logout', [UsuariosController::class, 'logout'])->name('logout');
 
     Route::get('/generar-pdf', [EntradasController::class, 'generarPDF'])->name('generar.pdf');
+
+    Route::get('/recuperar-contrasena', [PasswordResetController::class, 'showResetForm'])->name('password.request');
+    Route::post('/recuperar-contrasena', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
 });
